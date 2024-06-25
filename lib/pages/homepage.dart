@@ -1,5 +1,4 @@
-import 'package:connectivity_checker/blocs/internet_bloc/internet_bloc.dart';
-import 'package:connectivity_checker/blocs/internet_bloc/internet_state.dart';
+import 'package:connectivity_checker/cubit/internet_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,24 +14,30 @@ class Homepage extends StatelessWidget {
       ),
       body: SafeArea(
         child: Center(
-          child: BlocConsumer<InternetBloc, InternetState>(
+          child: BlocConsumer<InternetCubit, InternetState>(
               builder: (context, state) {
-            if (state is InternetGainedState) {
+            if (state == InternetState.Gained) {
               return const Text('Connected!');
-            } else if (state is InternetLostState) {
+            } else if (state == InternetState.Lost) {
               return const Text('Not Connected!');
             } else {
               return const Text('Loading...');
             }
           }, listener: (context, state) {
-            if (state is InternetGainedState) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Internet connected!',),
-                  backgroundColor: Colors.green,));
-            } else if (state is InternetLostState) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Internet lost!',),
-                  backgroundColor: Colors.red,));
+            if (state == InternetState.Gained) {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text(
+                  'Internet connected!',
+                ),
+                backgroundColor: Colors.green,
+              ));
+            } else if (state == InternetState.Lost) {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text(
+                  'Internet lost!',
+                ),
+                backgroundColor: Colors.red,
+              ));
             }
           }),
           // BlocBuilder<InternetBloc, InternetState>(builder: (context, state){
